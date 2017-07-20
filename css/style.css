@@ -1,0 +1,77 @@
+.material-icons.md-48 {
+	 font-size: 48px;
+}
+
+.bg {
+	height: 100%;
+	width: 100%;
+	background-color: #fcfcfc;
+}
+
+.bio p {
+	color: grey;
+	font-size: 35;
+	background-color: #f4f5f7;
+
+}
+
+.bio {
+	font-size: 120%;
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+
+	width: 50%;
+	height: 100;
+	font-family: "Consolas", Arial;
+}
+
+.image {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	width: 160px;
+	height: 160px;
+	border-radius: 50%;
+	background-image: url(../img/profile.jpg);
+	background-position: center center;
+	background-size: cover;
+	background-color: #fcfcfc;
+}
+
+.links {
+	margin-top: 400px;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 30px;
+	width: 50%;
+	height: 100%;
+	text-align: center;
+}
+
+#link1 {
+	padding-left: 50px;
+	padding-right: 50px;
+	color:grey;
+}
+
+#link2 {
+	padding-left: 50px;
+	padding-right: 50px;
+	color: grey;
+}
+
+#link3 {
+	padding-left: 50px;
+	padding-right: 50px;
+	color: grey;
+}
+
+#link4 {
+	padding-left: 50px;
+	padding-right: 50px;
+	text-decoration: none;
+	color: grey;
+}
