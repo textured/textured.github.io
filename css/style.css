@@ -17,7 +17,7 @@
 
 .bio {
 	font-size: 120%;
-	margin-top: 50px;
+	margin-top: 20px;
 	margin-left: auto;
 	margin-right: auto;
 
@@ -27,6 +27,7 @@
 }
 
 .image {
+    margin-top: 50px;
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
@@ -40,7 +41,7 @@
 }
 
 .links {
-	margin-top: 200px;
+	margin-top: 150px;
 	padding-top: 25px;
 	padding-bottom: 25px;
 	margin-left: auto;
