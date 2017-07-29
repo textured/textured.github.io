@@ -37,7 +37,7 @@ html, body {
 	width: 140px;
 	height: 140px;
 	border-radius: 50%;
-	background-image: url(../img/profile.jpg);
+	background-image: url(../img/avatar.PNG);
 	background-position: center center;
 	background-size: cover;
 	background-color: #fcfcfc;
@@ -66,12 +66,12 @@ html, body {
 	color: #aeb1b2;
 }
 
-/*#link3 {
+#link3 {
 	padding-left: 50px;
 	padding-right: 50px;
-	color: grey;
+	color: #aeb1b2;
 }
-*/
+
 #link4 {
 	padding-left: 50px;
 	padding-right: 50px;
