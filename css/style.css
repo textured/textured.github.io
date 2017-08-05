@@ -5,18 +5,18 @@
 .bg {
 	width: 100%;
     position: absolute;
-	background-color: white;
 }
 
 .bio p {
 	color: #787e80;
 	font-size: 35;
-	background-color: #f4f5f7;
+	background-color: #ECEFF1;
 }
 
 html, body {
 	height: 100%;
 	margin: 0;
+	background-color: #FAFAFA;
 }
 
 .bio {
@@ -59,16 +59,28 @@ html, body {
 	color: #aeb1b2;
 }
 
+#link1:hover {
+	color: #0077B5;
+}
+
 #link2 {
 	padding-left: 50px;
 	padding-right: 50px;
 	color: #aeb1b2;
 }
 
+#link2:hover {
+	color: #4078c0;
+}
+
 #link3 {
 	padding-left: 50px;
 	padding-right: 50px;
 	color: #aeb1b2;
+}
+
+#link3:hover {
+	color: #00a98f;
 }
 
 #link4 {
@@ -78,9 +90,17 @@ html, body {
 	color: #aeb1b2;
 }
 
+#link4:hover {
+	color: #b84592;
+}
+
 #link5 {
 	padding-left: 50px;
 	padding-right: 50px;
 	text-decoration: none;
 	color: #aeb1b2;
+}
+
+#link5:hover {
+	color: #21759b;
 }
