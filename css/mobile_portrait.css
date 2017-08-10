@@ -1,5 +1,5 @@
 .material-icons.md-48 {
-	 font-size: 24px;
+	 font-size: 16px;
 }
 
 html, body {
@@ -39,6 +39,69 @@ html, body {
 
 .bio p {
 	color: #787e80;
-	font-size: 24;
+	font-size: 16;
 	background-color: #ECEFF1;
+}
+
+.links {
+	margin-top: 15px;
+    margin-bottom: 15px;
+	padding-top: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+#link1 {
+	padding-left: 15px;
+	padding-right: 15px;
+	color: #aeb1b2;
+}
+
+#link1:hover {
+	color: #0077B5;
+}
+
+#link2 {
+	padding-left: 15px;
+	padding-right: 15px;
+	color: #aeb1b2;
+}
+
+#link2:hover {
+	color: #6e5494;
+}
+
+#link3 {
+	padding-left: 15px;
+	padding-right: 15px;
+	color: #aeb1b2;
+}
+
+#link3:hover {
+	color: #00a98f;
+}
+
+#link4 {
+	padding-left: 15px;
+	padding-right: 15px;
+	text-decoration: none;
+	color: #aeb1b2;
+}
+
+#link4:hover {
+	color: #b84592;
+}
+
+#link5 {
+	padding-left: 15px;
+	padding-right: 15px;
+	text-decoration: none;
+	color: #aeb1b2;
+}
+
+#link5:hover {
+	color: #21759b;
 }
