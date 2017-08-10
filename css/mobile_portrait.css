@@ -1,40 +1,10 @@
 .material-icons.md-48 {
-	 font-size: 16px;
-}
-
-html, body {
-	height: 100%;
-	margin: 0;
-	background-color: #FAFAFA;
+	 font-size: 48px;
 }
 
 .bg {
 	width: 100%;
     position: absolute;
-}
-
-.image {
-    margin-top: 30px;
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	width: 140px;
-	height: 140px;
-	border-radius: 50%;
-	background-image: url(../img/avatar.jpg);
-	background-position: center center;
-	background-size: cover;
-	background-color: #fcfcfc;
-}
-
-.bio {
-	font-size: 100%;
-	margin-top: 30px;
-	margin-left: auto;
-	margin-right: auto;
-	width: 50%;
-	height: 100;
-	font-family: "Consolas", Arial;
 }
 
 .bio p {
@@ -43,10 +13,40 @@ html, body {
 	background-color: #ECEFF1;
 }
 
-.links {
+html, body {
+	height: 100%;
+	margin: 0;
+	background-color: #FAFAFA;
+}
+
+.bio {
+	font-size: 100%;
 	margin-top: 15px;
-    margin-bottom: 15px;
-	padding-top: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 75%;
+	height: 100;
+	font-family: "Consolas", Arial;
+}
+
+.image {
+    margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	background-image: url(../img/avatar.jpg);
+	background-position: center center;
+	background-size: cover;
+	background-color: #fcfcfc;
+}
+
+.links {
+	margin-top: 25px;
+    margin-bottom: 50px;
+	padding-top: 25px;
 	margin-left: auto;
 	margin-right: auto;
 	width: 100%;
