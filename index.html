@@ -357,7 +357,7 @@
                     });
                     return itemDiv;
                 };
-                Object.entries(photographyMap).forEach(([filename, caption]) => {
+                Object.entries(photographyMap).reverse().forEach(([filename, caption]) => {
                     galleryContainer.appendChild(createGalleryItem(filename, caption));
                 });
             }
