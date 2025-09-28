@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Minimalist Portfolio</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* Clean white background */
+            color: #333333; /* Dark text for contrast */
+            scroll-behavior: smooth;
+            line-height: 1.6;
+            font-weight: 300; /* NEW: Set default body text to light (300) */
+        }
+        /* Custom scrollbar for aesthetics (subtle on light background) */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cccccc;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f5;
+        }
+
+        /* Styles for the Packed, Fixed-Column Masonry Effect */
+        #photo-gallery {
+            /* Use CSS Columns for automatic masonry flow */
+            columns: 2; /* 2 fixed columns on mobile */
+            column-gap: 1rem;
+            display: block; /* Override grid behavior */
+        }
+
+        @media (min-width: 1024px) {
+            #photo-gallery {
+                columns: 4; /* 4 fixed columns on desktop */
+                column-gap: 1.5rem; 
+            }
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            background-color: #f0f0f0; 
+            border-radius: 0.25rem; 
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            cursor: pointer;
+            
+            /* CRITICAL for column layout: must behave like a block element */
+            display: inline-block; 
+            width: 100%;
+            /* Prevents the image from being split across columns */
+            break-inside: avoid; 
+            margin-bottom: 1.5rem; /* Adds vertical spacing between items */
+        }
+
+        .gallery-item:hover {
+            transform: scale(0.99); 
+            opacity: 0.9;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto; /* Allow image height to dictate flow */
+            object-fit: cover;
+            vertical-align: top;
+        }
+        .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 0.5rem;
+            color: white;
+            opacity: 0;
+            font-size: 0.875rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+            transition: opacity 0.3s ease-in-out;
+        }
+        .gallery-item:hover .caption {
+            opacity: 1;
+        }
+        .nav-link {
+            /* UPDATED: Added vertical padding for spacing */
+            padding: 0.25rem 0.5rem;
+            color: #6b7280;
+            transition: color 0.3s ease-in-out;
+        }
+        .nav-link.active {
+            color: #333333;
+            /* UPDATED: Thinner border for a lighter look */
+            border-bottom: 1px solid #333333;
+        }
+        .nav-link:hover {
+            color: #000000;
+        }
+
+        /* Styles for Page Switching (Only one section visible at a time) */
+        .content-section {
+            display: none; /* Hidden by default */
+            min-height: 70vh; /* Ensures a minimum height when viewed */
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+        .content-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Modal Styles */
+        #image-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            /* border: 4px solid red; */ /* Remove debug border */
+        }
+        #image-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #close-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            cursor: pointer;
+            font-size: 2rem;
+            color: white;
+            transition: color 0.3s ease;
+        }
+        #close-modal:hover {
+            color: #ffcccc;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Fullscreen Modal for Image Preview -->
+<div id="image-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center;">
+    <img id="modal-img" src="" alt="Enlarged" style="max-width:90vw; max-height:90vh; border-radius:8px; box-shadow:0 4px 32px rgba(0,0,0,0.5);">
+</div>
+
+    <!-- Minimal Header Navigation -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+            <h1 class="text-xl font-extralight tracking-wide text-gray-900 uppercase">
+                <!-- UPDATED: Set site title to Daniel Phan -->
+                <a href="#photography" class="hover:text-gray-700 transition duration-300">
+                    Daniel Phan
+                </a>
+            </h1>
+            <div class="space-x-8 font-light text-sm md:text-base">
+                <!-- UPDATED: font-light (300) for thin nav links -->
+                <a href="#photography" class="nav-link" data-target="photography">Photography</a>
+                <a href="#code-projects" class="nav-link" data-target="code-projects">Dev</a>
+                <a href="#about-me" class="nav-link" data-target="about-me">About</a>
+                <a href="#contact" class="nav-link" data-target="contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24">
+        <!-- Photography Section (Main Focus) -->
+        <section id="photography" class="content-section pb-20 active">
+            <div id="photo-gallery">
+                <!-- Image elements will be inserted here with asymmetrical masonry flow -->
+            </div>
+        </section>
+
+        <!-- Code Projects Section (Hidden by default, shown on click) -->
+        <section id="code-projects" class="content-section pt-16 pb-20 border-t border-gray-200 mt-8">
+            <h2 class="text-3xl font-light tracking-wider mb-10 text-center text-gray-900 uppercase">
+                Work Experience
+            </h2>
+            <div class="max-w-4xl mx-auto space-y-8">
+                <!-- Resume Content Start -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h3 class="text-2xl font-bold mb-2">Daniel Phan</h3>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <a href="tel:1-909-331-2459" class="text-blue-600 hover:underline"><i class="fas fa-phone"></i> (909) 331-2459</a>
+                        <a href="mailto:daniel.phan123@gmail.com" class="text-blue-600 hover:underline"><i class="fas fa-envelope"></i> Email me</a>
+                        <a href="https://www.linkedin.com/in/danielqphan/" class="text-blue-600 hover:underline"><i class="fab fa-linkedin-in"></i> /danielqphan</a>
+                        <a href="https://github.com/textured" class="text-blue-600 hover:underline"><i class="fab fa-github"></i> Github</a>
+                        <a href="https://drive.google.com/file/d/1LDYGUcUivL8Wf0RyTPZyaFcvbzKt859y/view?usp=drive_link" class="text-blue-600 hover:underline"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Resume</a>
+                    </div>
+                    <h4 class="font-semibold mt-4 mb-2">Education</h4>
+                    <div class="mb-2">University of California, Irvine</div>
+                    <div class="mb-2">Bachelor of Science in Computer Science and Engineering (Sept 2014—June 2019)</div>
+                    <div class="mb-2">Minor in Statistics</div>
+                    <h4 class="font-semibold mt-4 mb-2">Experience</h4>
+                    <div class="mb-2">Atlassian, Senior Software Engineer (August 2021—Present)</div>
+                    <div class="mb-2">Toshiba America Business Solutions, Software Engineer (April 2021—August 2021)</div>
+                    <div class="mb-2">DealerClick Software, Junior Software Engineer Intern (June 2018—June 2019)</div>
+                    <div class="mb-2">University of California, Irvine, Lab Tutor (Sep 2017—Dec 2017)</div>
+                    <h4 class="font-semibold mt-4 mb-2">Projects</h4>
+                    <div class="mb-2">American Sign Language Translator (Sep 2018—June 2019)</div>
+                    <div class="mb-2">Discord-bot (July 2017—Ongoing)</div>
+                    <div class="mb-2">Othello and AI (Fall 2016 / Spring 2017)</div>
+                    <div class="mb-2">Optical Character Recognition (Winter 2016)</div>
+                    <h4 class="font-semibold mt-4 mb-2">Skills</h4>
+                    <div class="mb-2">C#, Java, Python, C++, C, MS Azure, SQL, Bash, Eclipse, Unix/Linux, .NET framework</div>
+                    <div class="mb-2">Windows/MacOS/Linux, Git/CVS, vim, Microsoft Excel, Microsoft Word</div>
+                    <h4 class="font-semibold mt-4 mb-2">Relevant Coursework</h4>
+                    <div class="mb-2">ICS 46: Data Structures and Algorithms (Spring 2017)</div>
+                    <div class="mb-2">EECS 22L: Software Engineering Project in C (Winter 2016)</div>
+                    <h4 class="font-semibold mt-4 mb-2">Accomplishments</h4>
+                    <div class="mb-2">Dean’s Honor List (Winter 2017)</div>
+                    <div class="mb-2">Dean’s Choice Award (UCI Engineering Winter Design Review)</div>
+                    <h4 class="font-semibold mt-4 mb-2">Leadership</h4>
+                    <div class="mb-2">Treasurer, Science Club • Montclair High School (Sep 2012—Sep 2014)</div>
+                </div>
+                <!-- Resume Content End -->
+            </div>
+        </section>
+
+        <!-- About Me Section (Hidden by default, shown on click) -->
+        <section id="about-me" class="content-section pt-16 pb-20 border-t border-gray-200 mt-8">
+            <h2 class="text-3xl font-light tracking-wider mb-10 text-center text-gray-900 uppercase">
+                About
+            </h2>
+            <div class="max-w-4xl mx-auto p-8 rounded-lg">
+                <div class="flex flex-col md:flex-row items-center md:items-start space-y-8 md:space-y-0 md:space-x-12">
+                    <img src="assets/avatar.jpg" alt="Profile Picture" class="w-40 h-40 object-cover rounded-full border border-gray-300">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800">The intersection of light and logic.</h3>
+                        <p class="text-lg mb-4 text-gray-600">
+                            I'm a <strong>digital artist and developer</strong> focused on crafting clean, functional experiences, whether that's through robust web applications or compelling photographic narratives. My work is defined by precision, attention to detail, and a deep understanding of structure—traits I value in both code and composition.
+                        </p>
+                        <p class="text-lg text-gray-600">
+                            When not optimizing a database query or building a new UI component, I'm usually exploring the outdoors, capturing the quiet moments between events. This portfolio is where these two passions—the technical and the visual—converge.
+                        </p>
+                        <div class="mt-8">
+                            <h4 class="text-xl font-semibold mb-2 text-gray-800">Tools</h4>
+                            <div class="mb-4">
+                                <span class="font-medium">Programming:</span>
+                                <span class="ml-2">Java, Kotlin, Spring Boot, AWS, Netflix Conductor</span>
+                            </div>
+                            <div>
+                                <span class="font-medium">Camera:</span>
+                                <span class="ml-2">Sony a7IV (GM 2 24-70mm), Fujifilm X100VI</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section (Mock) -->
+        <section id="contact" class="content-section pt-16 pb-20 border-t border-gray-200 mt-8">
+            <h2 class="text-3xl font-light tracking-wider mb-10 text-center text-gray-900 uppercase">
+                Contact
+            </h2>
+            <div class="max-w-xl mx-auto text-center space-y-4 text-lg text-gray-600">
+                <p>Feel free to connect regarding development collaborations or print inquiries.</p>
+                <p class="font-medium text-gray-800">Email: <a href="mailto:danielphan123@gmail.com" class="hover:text-gray-900 underline">danielphan123@gmail.com</a></p>
+                <p class="font-medium text-gray-800">LinkedIn: <a href="https://www.linkedin.com/in/danielqphan/" class="hover:text-gray-900 underline" target="_blank" rel="noopener">/danielqphan</a></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-8 border-t border-gray-100 text-center text-gray-400">
+        <p class="text-sm">&copy; 2025 Daniel Phan. All Rights Reserved. Minimalist Design.</p>
+    </footer>
+
+    <!-- Simple Custom Message Overlay -->
+    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-10 hidden items-center justify-center z-[100] transition-opacity duration-300">
+        <div class="bg-white p-6 rounded-md shadow-xl max-w-sm w-full border border-gray-300">
+            <h4 class="text-xl font-bold mb-3 text-gray-800">Information</h4>
+            <p id="modal-text" class="text-gray-600 mb-4"></p>
+            <button onclick="closeMessage()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 rounded-sm transition duration-300 text-sm">
+                Close
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DATA STRUCTURE FOR EASY MAINTENANCE ---
+
+        // 1. Define the base path where your images will live.
+        const imageBasePath = './assets/photos/';
+
+        // 2. To add a new photo, simply place the file in the above folder
+        //    and add its filename and caption to this map.
+        const photographyMap = {
+            'dragon_fly.JPG': 'Dragon Fly',
+            'dragon_fly_wide.JPG': 'Dragon Fly Wide',
+            'DSC00386.JPG': '',
+            'DSC00605.JPG': '',
+            'DSC00777.JPG': '',
+            'DSC00940.JPG': '',
+            'DSC00997.JPG': '',
+            'DSC01109.JPG': '',
+            'DSC01192.JPG': '',
+            'DSC01249.JPG': '',
+            'DSC01348.JPG': '',
+            'DSC01493.JPG': '',
+            'DSC01999.JPG': '',
+            'DSC02018.JPG': '',
+            'DSC02025.JPG': '',
+            'DSC02330.JPG': '',
+            'DSC02437.JPG': '',
+            'DSC02439.JPG': '',
+            'DSC02456.JPG': '',
+        };
+
+        // Helper function to create a title from a filename
+        const generateTitle = (filename) => {
+            // Remove file extension and clean up placeholder naming structure
+            let name = filename.split('.').slice(0, -1).join('.'); 
+            
+            // Replace underscores/hyphens with spaces and capitalize each word
+            name = name.replace(/[-_]/g, ' ');
+
+            return name
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        };
+
+
+        // --- GALLERY RENDERING LOGIC ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryContainer = document.getElementById('photo-gallery');
+            const imageModal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+
+            if (galleryContainer) {
+                const createGalleryItem = (filename, caption) => {
+                    const src = imageBasePath + filename;
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = `gallery-item`;
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = caption || '';
+                    img.loading = 'lazy';
+                    img.onerror = function() {
+                        this.onerror = null;
+                        this.src = 'https://placehold.co/600x400/FFCCCC/AA3333?text=MISSING+IMAGE';
+                    };
+                    if (caption) {
+                        const captionDiv = document.createElement('div');
+                        captionDiv.className = 'caption';
+                        captionDiv.innerHTML = `<p class=\"font-medium tracking-wider\">${caption}</p>`;
+                        itemDiv.appendChild(captionDiv);
+                    }
+                    itemDiv.appendChild(img);
+                    itemDiv.addEventListener('click', () => {
+                        modalImg.src = src;
+                        modalImg.alt = caption || '';
+                        imageModal.style.display = 'flex';
+                    });
+                    return itemDiv;
+                };
+                Object.entries(photographyMap).forEach(([filename, caption]) => {
+                    galleryContainer.appendChild(createGalleryItem(filename, caption));
+                });
+            }
+
+            // Hide modal on click outside image or ESC
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    imageModal.style.display = 'none';
+                    modalImg.src = '';
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    imageModal.style.display = 'none';
+                    modalImg.src = '';
+                }
+            });
+
+            // Section navigation logic
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            function showSection(targetId) {
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.target === targetId) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showSection(this.dataset.target);
+                });
+            });
+            // Show initial section based on hash or default to photography
+            const initialHash = window.location.hash.replace('#', '') || 'photography';
+            showSection(initialHash);
+        });
+
+        // --- CUSTOM MESSAGE OVERLAY FUNCTIONS ---
+
+        const modal = document.getElementById('message-modal');
+        const modalText = document.getElementById('modal-text');
+
+        function showMessage(text) {
+            modalText.textContent = text;
+            modal.style.display = 'flex';
+        }
+
+        function closeMessage() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal if user clicks outside the content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeMessage();
+            }
+        });
+    </script>
+</body>
+</html>
