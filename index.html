@@ -144,6 +144,79 @@
         .hidden {
             display: none !important;
         }
+
+        /* --- RESPONSIVE DESIGN IMPROVEMENTS --- */
+        @media (max-width: 640px) {
+            #photo-gallery {
+                columns: 1; /* 1 column for small screens */
+                column-gap: 0.5rem;
+            }
+            .gallery-item {
+                margin-bottom: 1rem;
+                border-radius: 0.5rem;
+            }
+            .caption {
+                font-size: 1rem;
+                padding: 0.75rem 0.5rem;
+            }
+            header nav {
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            header .space-x-8 {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 2rem !important;
+                align-items: center !important;
+                width: 100% !important;
+                justify-content: center !important;
+                margin: 0 !important;
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .nav-link {
+                display: inline-block !important;
+                width: auto !important;
+                text-align: center !important;
+                padding: 0.75rem 0.5rem !important;
+                font-size: 1.1rem !important;
+                border-bottom: 1px solid #333333 !important;
+                margin: 0 !important;
+            }
+            .nav-link.active {
+                color: #333333 !important;
+                border-bottom: 1px solid #333333 !important;
+                background: none !important;
+                border-radius: 0 !important;
+            }
+            main {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            h1, h2, h3 {
+                font-size: 1.3rem !important;
+            }
+            .content-section {
+                min-height: 60vh;
+                padding-top: 1.5rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+            #image-modal img {
+                max-width: 98vw;
+                max-height: 70vh;
+            }
+            .flex.md\:flex-row {
+                flex-direction: column !important;
+            }
+            .md\:items-start {
+                align-items: center !important;
+            }
+            .w-40.h-40 {
+                width: 96px !important;
+                height: 96px !important;
+            }
+        }
+        /* --- END RESPONSIVE DESIGN --- */
     </style>
 </head>
 <body class="min-h-screen">
@@ -217,11 +290,8 @@
         </section>
 
         <!-- About Me Section (Hidden by default, shown on click) -->
-        <section id="about-me" class="content-section pt-16 pb-20 border-t border-gray-200 mt-8">
-            <h2 class="text-3xl font-light tracking-wider mb-10 text-center text-gray-900 uppercase">
-                About
-            </h2>
-            <div class="max-w-4xl mx-auto p-8 rounded-lg">
+        <section id="about-me" class="content-section pt-16 pb-20 mt-8">
+            <div class="max-w-4xl mx-auto p-8 rounded-lg bg-white shadow-md">
                 <div class="flex flex-col md:flex-row items-center md:items-start space-y-8 md:space-y-0 md:space-x-12">
                     <img src="assets/avatar.jpg" alt="Profile Picture" class="w-40 h-40 object-cover rounded-full border border-gray-300">
                     <div>
@@ -249,11 +319,8 @@
         </section>
 
         <!-- Contact Section (Mock) -->
-        <section id="contact" class="content-section pt-16 pb-20 border-t border-gray-200 mt-8">
-            <h2 class="text-3xl font-light tracking-wider mb-10 text-center text-gray-900 uppercase">
-                Contact
-            </h2>
-            <div class="max-w-xl mx-auto text-center space-y-4 text-lg text-gray-600">
+        <section id="contact" class="content-section pt-16 pb-20 mt-8">
+            <div class="max-w-xl mx-auto p-8 rounded-lg bg-white shadow-md text-center space-y-4 text-lg text-gray-600">
                 <p>Feel free to connect regarding development collaborations or print inquiries.</p>
                 <p class="font-medium text-gray-800">Email: <a href="mailto:danielphan123@gmail.com" class="hover:text-gray-900 underline">danielphan123@gmail.com</a></p>
                 <p class="font-medium text-gray-800">LinkedIn: <a href="https://www.linkedin.com/in/danielqphan/" class="hover:text-gray-900 underline" target="_blank" rel="noopener">/danielqphan</a></p>
