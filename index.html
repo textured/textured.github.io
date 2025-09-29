@@ -372,26 +372,26 @@
 
         // 2. To add a new photo, simply place the file in the above folder
         //    and add its filename and caption to this map.
+        // photographyMap now supports single images or groups:
+        // 'main.jpg': { images: ['main.jpg', 'variation1.jpg', ...], caption: 'Caption' }
         const photographyMap = {
-            'dragon_fly.JPG': 'Dragon Fly',
-            'dragon_fly_wide.JPG': 'Dragon Fly Wide',
-            'DSC00386.JPG': '',
-            'DSC00605.JPG': '',
-            'DSC00777.JPG': '',
-            'DSC00940.JPG': '',
-            'DSC00997.JPG': '',
-            'DSC01109.JPG': '',
-            'DSC01192.JPG': '',
-            'DSC01249.JPG': '',
-            'DSC01348.JPG': '',
-            'DSC01493.JPG': '',
-            'DSC01999.JPG': '',
-            'DSC02018.JPG': '',
-            'DSC02025.JPG': '',
-            'DSC02330.JPG': '',
-            'DSC02437.JPG': '',
-            'DSC02439.JPG': '',
-            'DSC02456.JPG': '',
+            'dragon_fly.JPG': { images: ['dragon_fly.JPG', 'dragon_fly_wide.JPG'], caption: 'Dragon Fly' },
+            'DSC00386.JPG': { images: ['DSC00386.JPG'], caption: '' },
+            'DSC00605.JPG': { images: ['DSC00605.JPG'], caption: '' },
+            'DSC00777.JPG': { images: ['DSC00777.JPG'], caption: '' },
+            'DSC00940.JPG': { images: ['DSC00940.JPG'], caption: '' },
+            'DSC00997.JPG': { images: ['DSC00997.JPG'], caption: '' },
+            'DSC01109.JPG': { images: ['DSC01109.JPG'], caption: '' },
+            'DSC01192.JPG': { images: ['DSC01192.JPG'], caption: '' },
+            'DSC01249.JPG': { images: ['DSC01249.JPG'], caption: '' },
+            'DSC01348.JPG': { images: ['DSC01348.JPG'], caption: '' },
+            'DSC01493.JPG': { images: ['DSC01493.JPG'], caption: '' },
+            'DSC01999.JPG': { images: ['DSC01999.JPG'], caption: '' },
+            'DSC02018.JPG': { images: ['DSC02018.JPG'], caption: '' },
+            'DSC02025.JPG': { images: ['DSC02025.JPG'], caption: '' },
+            'DSC02330.JPG': { images: ['DSC02330.JPG'], caption: '' },
+            'DSC02437.JPG': { images: ['DSC02437.JPG', 'DSC02439.JPG'], caption: '' },
+            'DSC02456.JPG': { images: ['DSC02456.JPG'], caption: '' },
         };
 
         // Helper function to create a title from a filename
@@ -410,57 +410,138 @@
 
 
         // --- GALLERY RENDERING LOGIC ---
-
         document.addEventListener('DOMContentLoaded', () => {
             const galleryContainer = document.getElementById('photo-gallery');
             const imageModal = document.getElementById('image-modal');
             const modalImg = document.getElementById('modal-img');
+            // Carousel controls
+            let currentGroup = [];
+            let currentIndex = 0;
+            // Add carousel controls to modal
+            if (!document.getElementById('modal-prev')) {
+                const prevBtn = document.createElement('button');
+                prevBtn.id = 'modal-prev';
+                prevBtn.innerHTML = '&#8592;';
+                prevBtn.style.position = 'absolute';
+                prevBtn.style.left = '2vw';
+                prevBtn.style.top = '50%';
+                prevBtn.style.transform = 'translateY(-50%)';
+                prevBtn.style.fontSize = '2rem';
+                prevBtn.style.color = 'white';
+                prevBtn.style.background = 'none';
+                prevBtn.style.border = 'none';
+                prevBtn.style.cursor = 'pointer';
+                prevBtn.style.zIndex = '10001';
+                prevBtn.style.display = 'none';
+                imageModal.appendChild(prevBtn);
+                const nextBtn = document.createElement('button');
+                nextBtn.id = 'modal-next';
+                nextBtn.innerHTML = '&#8594;';
+                nextBtn.style.position = 'absolute';
+                nextBtn.style.right = '2vw';
+                nextBtn.style.top = '50%';
+                nextBtn.style.transform = 'translateY(-50%)';
+                nextBtn.style.fontSize = '2rem';
+                nextBtn.style.color = 'white';
+                nextBtn.style.background = 'none';
+                nextBtn.style.border = 'none';
+                nextBtn.style.cursor = 'pointer';
+                nextBtn.style.zIndex = '10001';
+                nextBtn.style.display = 'none';
+                imageModal.appendChild(nextBtn);
+            }
+            const prevBtn = document.getElementById('modal-prev');
+            const nextBtn = document.getElementById('modal-next');
+
+            function showModalGroup(group, idx) {
+                currentGroup = group;
+                currentIndex = idx;
+                modalImg.src = imageBasePath + group[idx];
+                prevBtn.style.display = group.length > 1 ? 'block' : 'none';
+                nextBtn.style.display = group.length > 1 ? 'block' : 'none';
+                // --- Show group preview thumbnails ---
+                let previewBar = document.getElementById('modal-preview-bar');
+                if (!previewBar) {
+                    previewBar = document.createElement('div');
+                    previewBar.id = 'modal-preview-bar';
+                    previewBar.style.position = 'absolute';
+                    previewBar.style.left = '50%';
+                    previewBar.style.bottom = '2vh';
+                    previewBar.style.transform = 'translateX(-50%)';
+                    previewBar.style.display = 'flex';
+                    previewBar.style.gap = '0.5rem';
+                    previewBar.style.zIndex = '10002';
+                    previewBar.style.background = 'rgba(0,0,0,0.5)';
+                    previewBar.style.padding = '0.5rem 1rem';
+                    previewBar.style.borderRadius = '1rem';
+                    imageModal.appendChild(previewBar);
+                }
+                previewBar.innerHTML = '';
+                group.forEach((imgName, i) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = imageBasePath + imgName;
+                    thumb.style.width = '48px';
+                    thumb.style.height = '48px';
+                    thumb.style.objectFit = 'cover';
+                    thumb.style.borderRadius = '0.5rem';
+                    thumb.style.opacity = i === idx ? '1' : '0.6';
+                    thumb.style.border = i === idx ? '2px solid #fff' : '2px solid transparent';
+                    thumb.style.cursor = 'pointer';
+                    thumb.onclick = (e) => {
+                        e.stopPropagation();
+                        showModalGroup(group, i);
+                    };
+                    previewBar.appendChild(thumb);
+                });
+                previewBar.style.display = group.length > 1 ? 'flex' : 'none';
+            }
+            prevBtn.onclick = function(e) {
+                e.stopPropagation();
+                currentIndex = (currentIndex - 1 + currentGroup.length) % currentGroup.length;
+                showModalGroup(currentGroup, currentIndex);
+            };
+            nextBtn.onclick = function(e) {
+                e.stopPropagation();
+                currentIndex = (currentIndex + 1) % currentGroup.length;
+                showModalGroup(currentGroup, currentIndex);
+            };
 
             if (galleryContainer) {
-                const createGalleryItem = (filename, caption) => {
-                    const src = imageBasePath + filename;
+                const createGalleryItem = (key, data) => {
+                    const mainImg = Array.isArray(data.images) ? data.images[0] : data.images;
+                    const src = imageBasePath + mainImg;
                     const itemDiv = document.createElement('div');
                     itemDiv.className = `gallery-item`;
                     const img = document.createElement('img');
                     img.src = src;
-                    img.alt = caption || '';
+                    img.alt = data.caption || '';
                     img.loading = 'lazy';
                     img.onerror = function() {
                         this.onerror = null;
                         this.src = 'https://placehold.co/600x400/FFCCCC/AA3333?text=MISSING+IMAGE';
                     };
-                    if (caption) {
+                    if (data.caption) {
                         const captionDiv = document.createElement('div');
                         captionDiv.className = 'caption';
-                        captionDiv.innerHTML = `<p class=\"font-medium tracking-wider\">${caption}</p>`;
+                        captionDiv.innerHTML = `<p class=\"font-medium tracking-wider\">${data.caption}</p>`;
                         itemDiv.appendChild(captionDiv);
                     }
                     itemDiv.appendChild(img);
                     itemDiv.addEventListener('click', () => {
-                        modalImg.src = src;
-                        modalImg.alt = caption || '';
+                        showModalGroup(data.images, 0);
                         imageModal.style.display = 'flex';
                     });
                     return itemDiv;
                 };
-                Object.entries(photographyMap).reverse().forEach(([filename, caption]) => {
-                    galleryContainer.appendChild(createGalleryItem(filename, caption));
+                Object.entries(photographyMap).reverse().forEach(([key, data]) => {
+                    galleryContainer.appendChild(createGalleryItem(key, data));
                 });
             }
 
-            // Hide modal on click outside image or ESC
-            imageModal.addEventListener('click', (e) => {
-                if (e.target === imageModal) {
-                    imageModal.style.display = 'none';
-                    modalImg.src = '';
-                }
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    imageModal.style.display = 'none';
-                    modalImg.src = '';
-                }
-            });
+            // Modal close logic
+            imageModal.onclick = function() {
+                this.style.display = 'none';
+            };
 
             // Section navigation logic
             const navLinks = document.querySelectorAll('.nav-link');
@@ -488,28 +569,35 @@
             // Show initial section based on hash or default to photography
             const initialHash = window.location.hash.replace('#', '') || 'photography';
             showSection(initialHash);
-        });
 
-        // --- CUSTOM MESSAGE OVERLAY FUNCTIONS ---
-
-        const modal = document.getElementById('message-modal');
-        const modalText = document.getElementById('modal-text');
-
-        function showMessage(text) {
-            modalText.textContent = text;
-            modal.style.display = 'flex';
-        }
-
-        function closeMessage() {
-            modal.style.display = 'none';
-        }
-
-        // Close modal if user clicks outside the content
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeMessage();
-            }
+            // --- KEYBOARD NAVIGATION LOGIC ---
+            document.addEventListener('keydown', (e) => {
+                if (imageModal.style.display === 'flex' && currentGroup.length > 1) {
+                    if (e.key === 'ArrowLeft') {
+                        currentIndex = (currentIndex - 1 + currentGroup.length) % currentGroup.length;
+                        showModalGroup(currentGroup, currentIndex);
+                        e.preventDefault();
+                    } else if (e.key === 'ArrowRight') {
+                        currentIndex = (currentIndex + 1) % currentGroup.length;
+                        showModalGroup(currentGroup, currentIndex);
+                        e.preventDefault();
+                    } else if (e.key === 'Escape') {
+                        imageModal.style.display = 'none';
+                        modalImg.src = '';
+                        let previewBar = document.getElementById('modal-preview-bar');
+                        if (previewBar) previewBar.style.display = 'none';
+                    }
+                } else if (e.key === 'Escape') {
+                    imageModal.style.display = 'none';
+                    modalImg.src = '';
+                    let previewBar = document.getElementById('modal-preview-bar');
+                    if (previewBar) previewBar.style.display = 'none';
+                }
+            });
         });
     </script>
+
+    <!-- Font Awesome Icons (if needed) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
