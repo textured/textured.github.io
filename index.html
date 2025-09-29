@@ -302,6 +302,25 @@
                         <p class="text-lg text-gray-600">
                             When not optimizing a database query or building a new UI component, I'm usually exploring the outdoors, capturing the quiet moments between events. This portfolio is where these two passions—the technical and the visual—converge.
                         </p>
+                        <!-- Animated Kaomoji -->
+                        <div id="kaomoji" class="mt-4 text-2xl text-center select-none"></div>
+                        <script>
+                        // Animated Kaomoji
+                        const kaomojiFrames = [
+                            '(=^･ω･^=)',
+                            '(=^‥^=)',
+                            '(=^･ｪ･^=)',
+                            '(=^･o･^=)',
+                            '(=^･∀･^=)',
+                            '(=^･ω･^=)ﾉ',
+                        ];
+                        let kaomojiIndex = 0;
+                        setInterval(() => {
+                            document.getElementById('kaomoji').textContent = kaomojiFrames[kaomojiIndex];
+                            kaomojiIndex = (kaomojiIndex + 1) % kaomojiFrames.length;
+                        }, 700);
+                        </script>
+                        <!-- End Animated Kaomoji -->
                         <div class="mt-8">
                             <h4 class="text-xl font-semibold mb-2 text-gray-800">Tools</h4>
                             <div class="mb-4">
